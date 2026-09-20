@@ -7,13 +7,39 @@ function App() {
   const [ticketSubmitted, setTicketSubmitted] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
 
-  function handleTicketSubmit(event) {
+  async function handleTicketSubmit(event) {
   event.preventDefault();
 
-  const newTicketNumber = "TKT-000001";
+  const formData = new FormData(event.target);
 
-  setTicketNumber(newTicketNumber);
-  setTicketSubmitted(true);
+  const ticketData = {
+    title: formData.get("title"),
+    description: formData.get("description"),
+    category: formData.get("category"),
+    priority: formData.get("priority")
+  };
+
+  try {
+    const response = await fetch("http://localhost:5000/api/tickets", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(ticketData)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to create ticket");
+    }
+
+    setTicketNumber(data.ticketNumber);
+    setTicketSubmitted(true);
+  } catch (error) {
+    console.error("Error submitting ticket:", error);
+    alert("Failed to create ticket. Please try again.");
+  }
 }
 
   if (loggedIn) {
@@ -83,19 +109,21 @@ function App() {
           <label htmlFor="ticket-title">Title</label>
           <input
             id="ticket-title"
-            type="text"
+            name="title"
+             type="text"
             placeholder="Briefly describe your issue"
           />
 
           <label htmlFor="ticket-description">Description</label>
           <textarea
             id="ticket-description"
+            name="description"
             placeholder="Describe your problem in detail"
             rows="6"
           />
 
           <label htmlFor="ticket-category">Category</label>
-          <select id="ticket-category">
+          <select id="ticket-category" name="category">
             <option>Technical Support</option>
             <option>Account Issues</option>
             <option>Billing</option>
@@ -105,7 +133,7 @@ function App() {
           </select>
 
           <label htmlFor="ticket-priority">Priority</label>
-          <select id="ticket-priority">
+          <select id="ticket-priority" name="priority">
             <option>Low</option>
             <option>Medium</option>
             <option>High</option>
