@@ -39,17 +39,39 @@ const ticketSchema = new mongoose.Schema(
     },
 
     status: {
+  type: String,
+  default: "New",
+  enum: [
+    "New",
+    "Open",
+    "In Progress",
+    "Waiting for User",
+    "Resolved",
+    "Closed"
+  ]
+},
+
+    assignedTo: {
+    type: String,
+    default: "Unassigned"
+},
+
+comments: [
+  {
+    text: {
       type: String,
-      default: "New",
-      enum: [
-        "New",
-        "Open",
-        "In Progress",
-        "Waiting for User",
-        "Resolved",
-        "Closed"
-      ]
+      required: true
+    },
+    author: {
+      type: String,
+      default: "User"
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
     }
+  }
+]
   },
   {
     timestamps: true
