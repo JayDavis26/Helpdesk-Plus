@@ -56,6 +56,7 @@ const ticketSchema = new mongoose.Schema(
     default: "Unassigned"
 },
 
+
 comments: [
   {
     text: {
@@ -71,7 +72,29 @@ comments: [
       default: Date.now
     }
   }
+],
+
+activityHistory: [
+  {
+    action: {
+      type: String,
+      required: true
+    },
+    details: {
+      type: String,
+      required: true
+    },
+    performedBy: {
+      type: String,
+      default: "User"
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
+  }
 ]
+
   },
   {
     timestamps: true

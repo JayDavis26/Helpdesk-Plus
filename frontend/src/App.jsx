@@ -142,7 +142,7 @@ function App() {
 >
   <option>Unassigned</option>
   <option>IT agent 1</option>
-  <option>IT agennt 2</option>
+  <option>IT agent 2</option>
   <option>IT Agent 3</option>
 </select>
 
