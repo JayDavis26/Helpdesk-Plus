@@ -9,6 +9,7 @@ function App() {
   const [ticketNumber, setTicketNumber] = useState("");
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
+  const [savedAssignee, setSavedAssignee] = useState("Unassigned");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
   const [filterPriority, setFilterPriority] = useState("All");
@@ -115,6 +116,22 @@ function App() {
               <h2>{selectedTicket.ticketNumber}</h2>
 
               <h3>{selectedTicket.title}</h3>
+    
+
+              <p>
+                <strong>Created:</strong>{" "}
+                {new Date(selectedTicket.createdAt).toLocaleString()}
+              </p>
+
+                <p>
+                <strong>Last Updated:</strong>{" "}
+                {new Date(selectedTicket.updatedAt).toLocaleString()}
+              </p>
+
+              <p>
+                  <strong>Currently Assigned To:</strong>{" "}
+                  {savedAssignee}
+              </p>
 
               <p>
                 <strong>Description:</strong>
@@ -149,6 +166,7 @@ function App() {
 <button
   className="submit-ticket-button"
   onClick={async () => {
+    console.log("Assign Ticket button clicked");
     try {
       const response = await fetch(
         `http://localhost:5000/api/tickets/${selectedTicket._id}/assign`,
@@ -170,7 +188,8 @@ function App() {
       }
 
       setSelectedTicket(data);
-
+      setSavedAssignee(data.assignedTo || "Unassigned");
+      
       setTickets((currentTickets) =>
         currentTickets.map((ticket) =>
           ticket._id === data._id ? data : ticket
@@ -295,6 +314,9 @@ function App() {
         }
 
         setSelectedTicket(data);
+        setSavedAssignee(
+        data.assignedTo || selectedTicket.assignedTo || "Unassigned"
+        );
 
         setTickets((currentTickets) =>
           currentTickets.map((ticket) =>
@@ -401,6 +423,8 @@ function App() {
       );
 
       const data = await response.json();
+      console.log("Assignment response:", data);
+      console.log("Returned assignedTo:", data.assignedTo);
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to resolve ticket");
@@ -799,7 +823,10 @@ function App() {
       <div
         className="ticket-list-item"
         key={ticket._id}
-        onClick={() => setSelectedTicket(ticket)}
+        onClick={() => {
+          setSelectedTicket(ticket);
+          setSavedAssignee(ticket.assignedTo || "Unassigned");
+        }}
         style={{ cursor: "pointer" }}
       >
         <div>
