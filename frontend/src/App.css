@@ -173,7 +173,6 @@ body {
   color: #222222;
 }
 
-/* My Tickets List */
 
 .ticket-list {
   width: 100%;
@@ -220,7 +219,6 @@ body {
   font-size: 13px;
 }
 
-/* Ticket Search and Filters */
 
 .ticket-filters {
   display: grid;
@@ -257,7 +255,6 @@ body {
   }
 }
 
-/* Ticket Comments */
 
 .ticket-comments {
   margin-top: 30px;
@@ -341,7 +338,6 @@ body {
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
 }
 
-/* Administrator UI */
 
 .dashboard-card h3 {
   font-size: 20px;
@@ -355,7 +351,6 @@ body {
   color: #666;
 }
 
-/* Administrator card spacing */
 
 .dashboard-card {
   padding: 24px;
@@ -368,4 +363,39 @@ body {
 .dashboard-card p,
 .dashboard-card strong {
   color: #000000;
+}
+
+.ticket-activity {
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.ticket-activity h3 {
+  margin-bottom: 20px;
+  color: #222222;
+}
+
+.activity-item {
+  margin-bottom: 15px;
+  padding: 15px;
+  background: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.activity-item strong {
+  color: #333333;
+  font-size: 14px;
+}
+
+.activity-item p {
+  margin: 8px 0;
+  color: #555555;
+  line-height: 1.5;
+}
+
+.activity-item small {
+  color: #777777;
+  font-size: 12px;
 }

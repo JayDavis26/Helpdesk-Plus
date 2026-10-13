@@ -187,19 +187,81 @@ function App() {
   Assign Ticket
 </button>
 
+<div className="ticket-activity">
+  <h3>Activity History</h3>
+
+  {selectedTicket.activityHistory &&
+  selectedTicket.activityHistory.length > 0 ? (
+    selectedTicket.activityHistory
+      .slice()
+      .reverse()
+      .map((activity, index) => (
+        <div className="activity-item" key={index}>
+          <strong>{activity.action}</strong>
+          <p>{activity.details}</p>
+          <small>
+            {activity.performedBy} ·{" "}
+            {new Date(activity.createdAt).toLocaleString()}
+          </small>
+        </div>
+      ))
+  ) : (
+    <p>No activity recorded yet.</p>
+  )}
+</div>
+
               <div className="ticket-comments">
   <h3>Comments</h3>
 
   {selectedTicket.comments && selectedTicket.comments.length > 0 ? (
-    selectedTicket.comments.map((comment, index) => (
-      <div className="comment-item" key={index}>
-        <strong>{comment.author}</strong>
-        <p>{comment.text}</p>
-      </div>
-    ))
-  ) : (
-    <p>No comments yet.</p>
-  )}
+  selectedTicket.comments.map((comment, index) => (
+    <div className="comment-item" key={comment._id || index}>
+      <strong>{comment.author}</strong>
+      <p>{comment.text}</p>
+
+      <button
+        type="button"
+        onClick={async () => {
+          const confirmed = window.confirm(
+            "Are you sure you want to delete this comment?"
+          );
+
+          if (!confirmed) return;
+
+          try {
+            const response = await fetch(
+              `http://localhost:5000/api/tickets/${selectedTicket._id}/comments/${comment._id}`,
+              { method: "DELETE" }
+            );
+
+            const updatedTicket = await response.json();
+
+            if (!response.ok) {
+              throw new Error(
+                updatedTicket.message || "Failed to delete comment"
+              );
+            }
+
+            setSelectedTicket(updatedTicket);
+            setTickets((previousTickets) =>
+              previousTickets.map((ticket) =>
+                ticket._id === updatedTicket._id
+                  ? updatedTicket
+                  : ticket
+              )
+            );
+          } catch (error) {
+            alert(error.message);
+          }
+        }}
+      >
+        Delete Comment
+      </button>
+    </div>
+  ))
+) : (
+  <p>No comments yet.</p>
+)}
 
   <form
     onSubmit={async (event) => {

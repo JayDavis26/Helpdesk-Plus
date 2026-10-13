@@ -3,11 +3,9 @@ const Ticket = require("../models/Ticket");
 
 const router = express.Router();
 
-// Create a new ticket
 router.post("/", async (req, res) => {
   try {
     const { title, description, category, priority } = req.body;
-
     const ticketCount = await Ticket.countDocuments();
     const ticketNumber = `TKT-${String(ticketCount + 1).padStart(6, "0")}`;
 
@@ -34,7 +32,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get all tickets
 router.get("/", async (req, res) => {
   try {
     const tickets = await Ticket.find().sort({ createdAt: -1 });
@@ -45,7 +42,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Update ticket status or priority
 router.patch("/:id", async (req, res) => {
   try {
     const { status, priority } = req.body;
@@ -61,7 +57,6 @@ router.patch("/:id", async (req, res) => {
         details: `Status changed from ${ticket.status} to ${status}.`,
         performedBy: "User"
       });
-
       ticket.status = status;
     }
 
@@ -71,7 +66,6 @@ router.patch("/:id", async (req, res) => {
         details: `Priority changed from ${ticket.priority} to ${priority}.`,
         performedBy: "User"
       });
-
       ticket.priority = priority;
     }
 
@@ -83,7 +77,6 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-// Add a comment to a ticket
 router.post("/:id/comments", async (req, res) => {
   try {
     const { text, author } = req.body;
@@ -121,7 +114,39 @@ router.post("/:id/comments", async (req, res) => {
   }
 });
 
-// Assign a ticket to a support agent
+router.delete("/:id/comments/:commentId", async (req, res) => {
+  try {
+    const { id, commentId } = req.params;
+    const ticket = await Ticket.findById(id);
+
+    if (!ticket) {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    const comment = ticket.comments.id(commentId);
+
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    const commentAuthor = comment.author || "User";
+
+    ticket.comments.pull({ _id: commentId });
+
+    ticket.activityHistory.push({
+      action: "Comment Deleted",
+      details: `A comment by ${commentAuthor} was deleted.`,
+      performedBy: "User"
+    });
+
+    await ticket.save();
+    res.json(ticket);
+  } catch (error) {
+    console.error("Error deleting comment:", error.message);
+    res.status(500).json({ message: "Failed to delete comment" });
+  }
+});
+
 router.patch("/:id/assign", async (req, res) => {
   try {
     const { assignedTo } = req.body;
