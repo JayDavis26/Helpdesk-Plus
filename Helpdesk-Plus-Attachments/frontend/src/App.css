@@ -403,8 +403,9 @@ body {
 
 .dashboard-notifications {
   position: absolute;
-  top: 18px;
+  top: 78px;
   right: 24px;
+  z-index: 10;
 }
 
 .dashboard {
