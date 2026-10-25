@@ -796,7 +796,34 @@ function App() {
       }
     </p>
   </div>
+          )}
+
+  {userRole === "Administrator" && (
+  <div className="dashboard-card">
+    <h3>User Management</h3>
+
+    <p>View registered users, their email addresses, and roles.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td colSpan="3">
+            Registered users will appear here.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 )}
+
 
           <div className="dashboard-cards">
             <div className="dashboard-card">

@@ -449,3 +449,99 @@ body {
 .ticket-attachments li { margin: 7px 0; overflow-wrap: anywhere; }
 .ticket-attachments a { color: #1559a6; }
 .ticket-attachments span { color: #666; font-size: 13px; }
+
+.dashboard-card table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.dashboard-card th,
+.dashboard-card td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.dashboard-card th {
+  background-color: #f0f4ff;
+  color: #243b70;
+}
+
+.dashboard-card tr:hover {
+  background-color: #f8faff;
+}
+
+/* Helpdesk+ Modern Color Theme */
+
+body {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.dashboard {
+  min-height: 100vh;
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.dashboard-header {
+  background: linear-gradient(135deg, #172554, #4338ca);
+  color: white;
+  padding: 20px 30px;
+}
+
+.dashboard-header h1 {
+  color: white;
+}
+
+.dashboard-content h2,
+.dashboard-card h3 {
+  color: #172554;
+}
+
+.dashboard-card,
+.ticket-form-card,
+.ticket-list {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(30, 41, 59, 0.06);
+}
+
+.submit-ticket-button {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  border: none;
+  border-radius: 9px;
+}
+
+.submit-ticket-button:hover {
+  background: linear-gradient(135deg, #4338ca, #6d28d9);
+}
+
+.dashboard-card th {
+  background: #e0e7ff;
+  color: #312e81;
+}
+
+.dashboard-card tbody tr:hover {
+  background: #eef2ff;
+}
+
+.ticket-list-item {
+  border-left: 4px solid #6366f1;
+}
+
+.ticket-list-item:hover {
+  background: #eef2ff;
+}
+
+.login-page {
+  background: linear-gradient(135deg, #172554, #7c3aed);
+}
+
+.login-card {
+  background: white;
+  border-radius: 18px;
+}
