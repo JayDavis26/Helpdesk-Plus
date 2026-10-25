@@ -13,6 +13,17 @@ const ticketSchema = new mongoose.Schema(
       required: true
     },
 
+    submitterName: {
+      type: String,
+      trim: true
+    },
+
+    submitterEmail: {
+      type: String,
+      trim: true,
+      lowercase: true
+    },
+
     description: {
       type: String,
       required: true

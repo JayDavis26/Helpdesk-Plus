@@ -11,9 +11,8 @@ const uploadDirectory = path.join(__dirname, "..", "uploads");
 fs.mkdirSync(uploadDirectory, { recursive: true });
 
 const allowedExtensions = new Set([
-  ".pdf", ".png", ".jpg", ".jpeg", ".gif", ".webp",
-  ".txt", ".csv", ".doc", ".docx", ".xls", ".xlsx",
-  ".ppt", ".pptx", ".zip", ".log"
+  ".png", ".jpg", ".jpeg", ".gif", ".webp",
+  ".mp4", ".mov", ".webm"
 ]);
 
 const storage = multer.diskStorage({
@@ -26,7 +25,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024, files: 5 },
+  limits: { fileSize: 50 * 1024 * 1024, files: 5 },
   fileFilter: (_req, file, callback) => {
     const extension = path.extname(file.originalname).toLowerCase();
     if (!allowedExtensions.has(extension)) {
@@ -40,7 +39,7 @@ function handleTicketUploads(req, res, next) {
   upload.array("attachments", 5)(req, res, (error) => {
     if (error) {
       const message = error.code === "LIMIT_FILE_SIZE"
-        ? "Each attachment must be 10 MB or smaller."
+        ? "Each attachment must be 50 MB or smaller."
         : error.code === "LIMIT_FILE_COUNT"
           ? "You can attach up to 5 files."
           : error.message;
@@ -52,7 +51,14 @@ function handleTicketUploads(req, res, next) {
 
 router.post("/", handleTicketUploads, async (req, res) => {
   try {
-    const { title, description, category, priority } = req.body;
+    const {
+      title,
+      description,
+      category,
+      priority,
+      submitterName,
+      submitterEmail
+  } = req.body;
     const ticketCount = await Ticket.countDocuments();
     const ticketNumber = `TKT-${String(ticketCount + 1).padStart(6, "0")}`;
 
@@ -62,6 +68,8 @@ router.post("/", handleTicketUploads, async (req, res) => {
       description,
       category,
       priority,
+      submitterName: submitterName?.trim(),
+      submitterEmail: submitterEmail?.trim().toLowerCase(),
       attachments: (req.files || []).map((file) => ({
         originalName: file.originalname,
         filename: file.filename,

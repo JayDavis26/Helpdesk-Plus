@@ -110,7 +110,17 @@ function App() {
               <h2>{selectedTicket.ticketNumber}</h2>
 
               <h3>{selectedTicket.title}</h3>
-    
+
+              <p>
+                <strong>Submitted By:</strong>{" "}
+                 {selectedTicket.submitterName || "Not provided"}
+              </p>
+
+              <p>
+                <strong>Email Address:</strong>{" "}
+                {selectedTicket.submitterEmail || "Not provided"}
+              </p>
+
 
               <p>
                 <strong>Created:</strong>{" "}
@@ -633,6 +643,24 @@ function App() {
               <h2>Create Ticket</h2>
 
               <form onSubmit={handleTicketSubmit}>
+              <label htmlFor="submitterName">Full Name</label>
+              <input
+                id="submitterName"
+                name="submitterName"
+                type="text"
+                placeholder="Enter your full name"
+                required
+              />
+
+              <label htmlFor="submitterEmail">Email Address</label>
+              <input
+                id="submitterEmail"
+                name="submitterEmail"
+                type="email"
+                placeholder="Enter your email address"
+                required
+              />
+
                 <label htmlFor="title">Title</label>
 
                 <input
@@ -673,16 +701,21 @@ function App() {
                   <option>Critical</option>
                 </select>
 
-                <label htmlFor="attachments">Attachments (optional)</label>
+                <label htmlFor="attachments">
+                   Pictures and Videos (optional)
+                </label>
+
                 <input
                   id="attachments"
                   name="attachments"
                   type="file"
                   multiple
-                  accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,.csv,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.log"
+                  accept=".png,.jpg,.jpeg,.gif,.webp,.mp4,.mov,.webm"
                 />
+
                 <p className="attachment-help">
-                  Up to 5 files, maximum 10 MB each. Supported: PDF, images, text, Office documents, ZIP, CSV, and LOG.
+                Up to 5 pictures or videos, maximum 50 MB each.
+                Supported: PNG, JPG, JPEG, GIF, WebP, MP4, MOV, and WebM.
                 </p>
 
                 <button
