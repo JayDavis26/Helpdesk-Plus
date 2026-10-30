@@ -45,7 +45,10 @@ function App() {
 
       return data;
     })
-    .then((data) => setTickets(data))
+    .then((data) => {
+console.log("Tickets received by frontend:", data);
+setTickets(data);
+})
     .catch((error) => {
       console.error("Error fetching tickets:", error);
     });
@@ -98,9 +101,13 @@ async function handleTicketSubmit(event) {
       throw new Error(data.message || "Failed to create ticket");
     }
 
-    setTicketNumber(data.ticketNumber);
-    setTicketSubmitted(true);
-    notify(`Ticket ${data.ticketNumber} was created successfully.`, "success");
+  setTicketNumber(data.ticketNumber);
+setTickets((currentTickets) => [
+  data,
+  ...currentTickets.filter((ticket) => ticket._id !== data._id),
+]);
+setTicketSubmitted(true);
+notify(`Ticket ${data.ticketNumber} was created successfully.`, "success");
   } catch (error) {
     console.error("Error submitting ticket:", error);
     alert("Failed to create ticket. Please try again.");
@@ -225,10 +232,13 @@ const response = await fetch(
                 <strong>Category:</strong> {selectedTicket.category}
               </p>
 
+            {["Administrator", "Support Agent"].includes(userRole) && (
+              <>
               <label htmlFor="ticket-detail-assigned">
   <strong>Assigned To:</strong>
 </label>
-
+</>
+            )}
 <select
   id="ticket-detail-assigned"
   value={selectedTicket.assignedTo || "Unassigned"}
@@ -463,6 +473,8 @@ const response = await fetch(
                 <option>Critical</option>
               </select>
 
+                {["Administrator", "Support Agent"].includes(userRole) && (
+                  <>
               <label htmlFor="ticket-detail-status">
                 <strong>Status:</strong>
               </label>
@@ -484,6 +496,8 @@ const response = await fetch(
                 <option>Resolved</option>
                 <option>Closed</option>
               </select>
+              </>
+                )}
 
               <button
                 className="submit-ticket-button"

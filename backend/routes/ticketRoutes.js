@@ -111,12 +111,13 @@ router.post("/", handleTicketUploads, async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const filter =
-  req.authUser.role === "User"
-    ? { createdBy: req.authUser._id }
-    : {};
+      req.authUser.role === "User"
+        ? { createdBy: req.authUser._id }
+        : {};
 
-const tickets = await Ticket.find(filter).sort({ createdAt: -1 });
-res.json(tickets);
+    const tickets = await Ticket.find(filter).sort({ createdAt: -1 });
+
+    res.json(tickets);
   } catch (error) {
     console.error("Error fetching tickets:", error.message);
     res.status(500).json({ message: "Failed to fetch tickets" });
@@ -129,19 +130,34 @@ router.patch("/:id", async (req, res) => {
     const ticket = await Ticket.findById(req.params.id);
 
     if (!ticket) {
-      return res.status(404).json({ message: "Ticket not found" });
+      return res.status(404).json({
+        message: "Ticket not found"
+      });
     }
 
     if (!canAccessTicket(req.authUser, ticket)) {
-  return res.status(403).json({ message: "You cannot access this ticket." });
-}
+      return res.status(403).json({
+        message: "You cannot access this ticket."
+      });
+    }
 
-    if (status && status !== ticket.status) {
+    if (
+      status !== undefined &&
+      status !== ticket.status &&
+      !["Administrator", "Support Agent"].includes(req.authUser.role)
+    ) {
+      return res.status(403).json({
+        message: "Only administrators and support agents can change ticket status."
+      });
+    }
+
+    if (status !== undefined && status !== ticket.status) {
       ticket.activityHistory.push({
         action: "Status Changed",
         details: `Status changed from ${ticket.status} to ${status}.`,
-        performedBy: "User"
+        performedBy: req.authUser.role
       });
+
       ticket.status = status;
     }
 
@@ -149,16 +165,21 @@ router.patch("/:id", async (req, res) => {
       ticket.activityHistory.push({
         action: "Priority Changed",
         details: `Priority changed from ${ticket.priority} to ${priority}.`,
-        performedBy: "User"
+        performedBy: req.authUser.role
       });
+
       ticket.priority = priority;
     }
 
     const updatedTicket = await ticket.save();
+
     res.json(updatedTicket);
   } catch (error) {
     console.error("Error updating ticket:", error.message);
-    res.status(500).json({ message: "Failed to update ticket" });
+
+    res.status(500).json({
+      message: "Failed to update ticket"
+    });
   }
 });
 
@@ -214,11 +235,7 @@ router.delete("/:id/comments/:commentId", async (req, res) => {
       return res.status(404).json({ message: "Ticket not found" });
     }
 
-    if (!canAccessTicket(req.authUser, ticket)) {
-  return res.status(403).json({
-    message: "You cannot access this ticket."
-  });
-}
+    
 
     const comment = ticket.comments.id(commentId);
 
@@ -246,9 +263,20 @@ router.delete("/:id/comments/:commentId", async (req, res) => {
 
 router.patch("/:id/assign", async (req, res) => {
   try {
+    if (
+      !["Administrator", "Support Agent"].includes(req.authUser.role)
+    ) {
+      return res.status(403).json({
+        message: "Only administrators and support agents can assign tickets."
+      });
+    }
+
     const { assignedTo } = req.body;
 
-    if (!assignedTo || assignedTo.trim() === "") {
+    if (
+      typeof assignedTo !== "string" ||
+      assignedTo.trim() === ""
+    ) {
       return res.status(400).json({
         message: "Support agent is required"
       });
@@ -257,7 +285,9 @@ router.patch("/:id/assign", async (req, res) => {
     const ticket = await Ticket.findById(req.params.id);
 
     if (!ticket) {
-      return res.status(404).json({ message: "Ticket not found" });
+      return res.status(404).json({
+        message: "Ticket not found"
+      });
     }
 
     const newAssignee = assignedTo.trim();
@@ -269,15 +299,19 @@ router.patch("/:id/assign", async (req, res) => {
       ticket.activityHistory.push({
         action: "Ticket Assigned",
         details: `Assignment changed from ${previousAssignee} to ${newAssignee}.`,
-        performedBy: "User"
+        performedBy: req.authUser.role
       });
     }
 
     const updatedTicket = await ticket.save();
+
     res.json(updatedTicket);
   } catch (error) {
     console.error("Error assigning ticket:", error.message);
-    res.status(500).json({ message: "Failed to assign ticket" });
+
+    res.status(500).json({
+      message: "Failed to assign ticket"
+    });
   }
 });
 
