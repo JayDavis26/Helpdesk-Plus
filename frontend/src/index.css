@@ -184,3 +184,87 @@ code {
 .submit-ticket-button:hover {
   background: #333333;
 }
+
+.dashboard-agent {
+  --role-primary: #2563eb;
+  --role-secondary: #1d4ed8;
+  --role-light: #dbeafe;
+  --role-hover: #eff6ff;
+}
+
+.dashboard-agent .dashboard-header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+}
+
+.dashboard-agent .submit-ticket-button {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+}
+
+.dashboard-agent .submit-ticket-button:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+
+.dashboard-agent .dashboard-content h2,
+.dashboard-agent .dashboard-card h3 {
+  color: #1e40af;
+}
+
+.dashboard-agent .ticket-list-item {
+  border-left: 4px solid #2563eb;
+}
+
+.dashboard-agent .ticket-list-item:hover {
+  background: #eff6ff;
+}
+
+.dashboard-agent .dashboard-card th {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.dashboard-agent .dashboard-card tbody tr:hover {
+  background: #eff6ff;
+}
+
+.dashboard-admin {
+  --role-primary: #7c3aed;
+  --role-secondary: #5b21b6;
+  --role-light: #ede9fe;
+  --role-hover: #f5f3ff;
+}
+
+.dashboard-admin .dashboard-header {
+  background: linear-gradient(135deg, #4c1d95, #7c3aed);
+}
+
+.dashboard-admin .submit-ticket-button {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  color: white;
+}
+
+.dashboard-admin .submit-ticket-button:hover {
+  background: linear-gradient(135deg, #6d28d9, #4c1d95);
+}
+
+.dashboard-admin .dashboard-content h2,
+.dashboard-admin .dashboard-card h3 {
+  color: #5b21b6;
+}
+
+.dashboard-admin .ticket-list-item {
+  border-left: 4px solid #7c3aed;
+}
+
+.dashboard-admin .ticket-list-item:hover {
+  background: #f5f3ff;
+}
+
+.dashboard-admin .dashboard-card th {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.dashboard-admin .dashboard-card tbody tr:hover {
+  background: #f5f3ff;
+}

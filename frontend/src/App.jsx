@@ -45,10 +45,7 @@ function App() {
 
       return data;
     })
-    .then((data) => {
-console.log("Tickets received by frontend:", data);
-setTickets(data);
-})
+    .then((data) => setTickets(data))
     .catch((error) => {
       console.error("Error fetching tickets:", error);
     });
@@ -101,13 +98,9 @@ async function handleTicketSubmit(event) {
       throw new Error(data.message || "Failed to create ticket");
     }
 
-  setTicketNumber(data.ticketNumber);
-setTickets((currentTickets) => [
-  data,
-  ...currentTickets.filter((ticket) => ticket._id !== data._id),
-]);
-setTicketSubmitted(true);
-notify(`Ticket ${data.ticketNumber} was created successfully.`, "success");
+    setTicketNumber(data.ticketNumber);
+    setTicketSubmitted(true);
+    notify(`Ticket ${data.ticketNumber} was created successfully.`, "success");
   } catch (error) {
     console.error("Error submitting ticket:", error);
     alert("Failed to create ticket. Please try again.");
@@ -158,7 +151,15 @@ const response = await fetch(
   if (loggedIn) {
     if (selectedTicket) {
       return (
-        <div className="dashboard">
+        <div
+  className={`dashboard ${
+    userRole === "Administrator"
+      ? "dashboard-admin"
+      : userRole === "Support Agent"
+      ? "dashboard-agent"
+      : ""
+  }`}
+>
           <div className="dashboard-notifications"><NotificationCenter /></div>
           <header className="dashboard-header">
             <h1>Helpdesk+</h1>
@@ -675,7 +676,15 @@ const response = await fetch(
     if (showCreateTicket) {
       if (ticketSubmitted) {
         return (
-          <div className="dashboard">
+          <div
+  className={`dashboard ${
+    userRole === "Administrator"
+      ? "dashboard-admin"
+      : userRole === "Support Agent"
+      ? "dashboard-agent"
+      : ""
+  }`}
+>
           <div className="dashboard-notifications"><NotificationCenter /></div>
             <header className="dashboard-header">
               <h1>Helpdesk+</h1>
@@ -718,7 +727,15 @@ const response = await fetch(
       }
 
       return (
-        <div className="dashboard">
+        <div
+  className={`dashboard ${
+    userRole === "Administrator"
+      ? "dashboard-admin"
+      : userRole === "Support Agent"
+      ? "dashboard-agent"
+      : ""
+  }`}
+>
           <div className="dashboard-notifications"><NotificationCenter /></div>
           <header className="dashboard-header">
             <h1>Helpdesk+</h1>
@@ -824,7 +841,15 @@ const response = await fetch(
     }
 
     return (
-      <div className="dashboard">
+      <div
+  className={`dashboard ${
+    userRole === "Administrator"
+      ? "dashboard-admin"
+      : userRole === "Support Agent"
+      ? "dashboard-agent"
+      : ""
+  }`}
+>
           <div className="dashboard-notifications"><NotificationCenter /></div>
         <header className="dashboard-header">
           <h1>Helpdesk+</h1>
