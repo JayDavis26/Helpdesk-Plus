@@ -157,6 +157,8 @@ const response = await fetch(
       ? "dashboard-admin"
       : userRole === "Support Agent"
       ? "dashboard-agent"
+      : ["User", "Regular User"].includes(userRole)
+        ? "dashboard-user"
       : ""
   }`}
 >
@@ -682,6 +684,8 @@ const response = await fetch(
       ? "dashboard-admin"
       : userRole === "Support Agent"
       ? "dashboard-agent"
+      : ["User", "Regular User"].includes(userRole)
+        ? "dashboard-user"
       : ""
   }`}
 >
@@ -733,6 +737,8 @@ const response = await fetch(
       ? "dashboard-admin"
       : userRole === "Support Agent"
       ? "dashboard-agent"
+      : ["User", "Regular User"].includes(userRole)
+        ? "dashboard-user"
       : ""
   }`}
 >
@@ -847,6 +853,8 @@ const response = await fetch(
       ? "dashboard-admin"
       : userRole === "Support Agent"
       ? "dashboard-agent"
+      : ["User", "Regular User"].includes(userRole)
+        ? "dashboard-user"
       : ""
   }`}
 >
