@@ -7,6 +7,22 @@ const fs = require("fs");
 const crypto = require("crypto");
 
 const router = express.Router();
+const allowedStatuses = [
+  "New",
+  "Open",
+  "In Progress",
+  "Waiting for User",
+  "Resolved",
+  "Closed"
+];
+
+const allowedPriorities = [
+  "Low",
+  "Medium",
+  "High",
+  "Critical"
+];
+
 function canAccessTicket(user, ticket) {
   if (["Support Agent", "Administrator"].includes(user.role)) {
     return true;
@@ -142,6 +158,24 @@ router.patch("/:id", async (req, res) => {
     }
 
     if (
+  status !== undefined &&
+  !allowedStatuses.includes(status)
+) {
+  return res.status(400).json({
+    message: "Invalid ticket status."
+  });
+}
+
+if (
+  priority !== undefined &&
+  !allowedPriorities.includes(priority)
+) {
+  return res.status(400).json({
+    message: "Invalid ticket priority."
+  });
+}
+
+    if (
       status !== undefined &&
       status !== ticket.status &&
       !["Administrator", "Support Agent"].includes(req.authUser.role)
@@ -161,7 +195,7 @@ router.patch("/:id", async (req, res) => {
       ticket.status = status;
     }
 
-    if (priority && priority !== ticket.priority) {
+    if (priority !== undefined && priority !== ticket.priority) {
       ticket.activityHistory.push({
         action: "Priority Changed",
         details: `Priority changed from ${ticket.priority} to ${priority}.`,
@@ -185,7 +219,7 @@ router.patch("/:id", async (req, res) => {
 
 router.post("/:id/comments", async (req, res) => {
   try {
-    const { text, author } = req.body;
+    const { text } = req.body;
 
     if (!text || text.trim() === "") {
       return res.status(400).json({
@@ -205,18 +239,16 @@ router.post("/:id/comments", async (req, res) => {
   });
 }
 
-    const commentAuthor = author || "User";
 
     ticket.comments.push({
-      text: text.trim(),
-      author: commentAuthor
-    });
-
-    ticket.activityHistory.push({
-      action: "Comment Added",
-      details: `${commentAuthor} added a comment.`,
-      performedBy: commentAuthor
-    });
+  text: text.trim(),
+  author: req.authUser.role
+});
+   ticket.activityHistory.push({
+  action: "Comment Added",
+  details: `${req.authUser.role} added a comment.`,
+  performedBy: req.authUser.role
+});
 
     await ticket.save();
     res.json(ticket);
@@ -235,7 +267,11 @@ router.delete("/:id/comments/:commentId", async (req, res) => {
       return res.status(404).json({ message: "Ticket not found" });
     }
 
-    
+    if (!canAccessTicket(req.authUser, ticket)) {
+      return res.status(403).json({
+        message: "You cannot access this ticket."
+      });
+    }
 
     const comment = ticket.comments.id(commentId);
 

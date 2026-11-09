@@ -204,6 +204,11 @@ const response = await fetch(
               </p>
 
               <p>
+                  <strong>Priority:</strong>{" "}
+                  {selectedTicket.priority || "Not set"}
+              </p>
+
+              <p>
                 <strong>Description:</strong>
               </p>
 
@@ -411,7 +416,6 @@ const response = await fetch(
     },
     body: JSON.stringify({
       text: commentText,
-      author: "User"
     })
   }
 );
