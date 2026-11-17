@@ -31,7 +31,7 @@ function App() {
     return;
   }
 
-  fetch("http://localhost:5000/api/tickets", {
+  fetch("https://helpdesk-plus-2.onrender.com/api/tickets", {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -61,7 +61,7 @@ function App() {
 }
 
    let cancelled = false;
-    fetch("http://localhost:5000/api/auth/users", {
+    fetch("https://helpdesk-plus-2.onrender.com/api/auth/users", {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(async (response) => {
@@ -84,7 +84,7 @@ async function handleTicketSubmit(event) {
   try {
     const token = sessionStorage.getItem("helpdeskToken");
 
-    const response = await fetch("http://localhost:5000/api/tickets", {
+    const response = await fetch("https://helpdesk-plus-2.onrender.com//api/tickets", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`
@@ -112,7 +112,7 @@ async function handleTicketSubmit(event) {
       const token = sessionStorage.getItem("helpdeskToken");
 
 const response = await fetch(
-  `http://localhost:5000/api/tickets/${selectedTicket._id}`,
+  `https://helpdesk-plus-2.onrender.com//api/tickets/${selectedTicket._id}`,
   {
     method: "PATCH",
     headers: {
@@ -221,7 +221,7 @@ const response = await fetch(
                     {selectedTicket.attachments.map((attachment) => (
                       <li key={attachment.filename}>
                         <a
-                          href={`http://localhost:5000${attachment.url}`}
+                          href={`https://helpdesk-plus-2.onrender.com/${attachment.url}`}
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -271,7 +271,7 @@ const response = await fetch(
       const token = sessionStorage.getItem("helpdeskToken");
 
 const response = await fetch(
-  `http://localhost:5000/api/tickets/${selectedTicket._id}/assign`,
+  `https://helpdesk-plus-2.onrender.com/api/tickets/${selectedTicket._id}/assign`,
   {
     method: "PATCH",
     headers: {
@@ -355,7 +355,7 @@ const response = await fetch(
             const token = sessionStorage.getItem("helpdeskToken");
 
 const response = await fetch(
-  `http://localhost:5000/api/tickets/${selectedTicket._id}/comments/${comment._id}`,
+  `https://helpdesk-plus-2.onrender.com/api/tickets/${selectedTicket._id}/comments/${comment._id}`,
   {
     method: "DELETE",
     headers: {
@@ -407,7 +407,7 @@ const response = await fetch(
         const token = sessionStorage.getItem("helpdeskToken");
 
 const response = await fetch(
-  `http://localhost:5000/api/tickets/${selectedTicket._id}/comments`,
+  `https://helpdesk-plus-2.onrender.com/api/tickets/${selectedTicket._id}/comments`,
   {
     method: "POST",
     headers: {
@@ -529,7 +529,7 @@ const response = await fetch(
       const token = sessionStorage.getItem("helpdeskToken");
 
 const response = await fetch(
-  `http://localhost:5000/api/tickets/${selectedTicket._id}`,
+  `https://helpdesk-plus-2.onrender.com/api/tickets/${selectedTicket._id}`,
   {
     method: "PATCH",
     headers: {
@@ -579,7 +579,7 @@ const response = await fetch(
         const token = sessionStorage.getItem("helpdeskToken");
 
 const response = await fetch(
-  `http://localhost:5000/api/tickets/${selectedTicket._id}`,
+  `https://helpdesk-plus-2.onrender.com/api/tickets/${selectedTicket._id}`,
   {
     method: "PATCH",
     headers: {
@@ -627,7 +627,7 @@ const response = await fetch(
         const token = sessionStorage.getItem("helpdeskToken");
 
 const response = await fetch(
-  `http://localhost:5000/api/tickets/${selectedTicket._id}`,
+  `https://helpdesk-plus-2.onrender.com/api/tickets/${selectedTicket._id}`,
   {
     method: "PATCH",
     headers: {
@@ -944,7 +944,7 @@ const response = await fetch(
       if (!token) { setUsersError("Your admin session is missing. Please log out and sign in again."); return; }
       setUsersLoading(true);
       setUsersError("");
-      fetch("http://localhost:5000/api/auth/users", { headers: { Authorization: `Bearer ${token}` } })
+      fetch("https://helpdesk-plus-2.onrender.com/api/auth/users", { headers: { Authorization: `Bearer ${token}` } })
         .then(async (response) => { const data = await response.json(); if (!response.ok) throw new Error(data.message || "Could not load users."); return data; })
         .then(setRegisteredUsers)
         .catch((error) => setUsersError(error.message))
@@ -1113,7 +1113,7 @@ const response = await fetch(
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/auth/${isRegistering ? "register" : "login"}`,
+        `https://helpdesk-plus-2.onrender.com/api/auth/${isRegistering ? "register" : "login"}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
