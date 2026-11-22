@@ -112,7 +112,7 @@ async function handleTicketSubmit(event) {
       const token = sessionStorage.getItem("helpdeskToken");
 
 const response = await fetch(
-  `https://helpdesk-plus-2.onrender.com//api/tickets/${selectedTicket._id}`,
+  `https://helpdesk-plus-2.onrender.com/api/tickets/${selectedTicket._id}`,
   {
     method: "PATCH",
     headers: {

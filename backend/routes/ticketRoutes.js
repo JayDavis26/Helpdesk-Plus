@@ -242,7 +242,7 @@ router.post("/:id/comments", async (req, res) => {
 
     ticket.comments.push({
   text: text.trim(),
-  author: req.authUser.role
+  author: req.authUser.name || req.authUser.email,
 });
    ticket.activityHistory.push({
   action: "Comment Added",
