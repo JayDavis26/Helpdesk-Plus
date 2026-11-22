@@ -84,7 +84,7 @@ async function handleTicketSubmit(event) {
   try {
     const token = sessionStorage.getItem("helpdeskToken");
 
-    const response = await fetch("https://helpdesk-plus-2.onrender.com//api/tickets", {
+    const response = await fetch("https://helpdesk-plus-2.onrender.com/api/tickets", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`
